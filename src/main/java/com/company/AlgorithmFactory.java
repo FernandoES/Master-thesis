@@ -14,20 +14,20 @@ public class AlgorithmFactory {
     private static Algorithm selectAlgorithm(String algorithmName) {
         if (algorithmName.equalsIgnoreCase("KMeansInternal")) {
             return new KMeansInternal();
-        }else if (algorithmName.equalsIgnoreCase("KMeansExternal")) {
+        }else if (algorithmName.toLowerCase().equalsIgnoreCase("KMeansExternal".toLowerCase())) {
             return new KMeansExternal();
-        }else if (algorithmName.equalsIgnoreCase("KMeansWeka")) {
+        }else if (algorithmName.toLowerCase().equalsIgnoreCase("KMeansWeka".toLowerCase())) {
             return new KMeansWeka();
-        }else if (algorithmName.equalsIgnoreCase("RandomCentersClustering")) {
+        }else if (algorithmName.toLowerCase().equalsIgnoreCase("RandomCentersClustering".toLowerCase())) {
             return new RandomCentersClustering();
-        } else if (algorithmName.equalsIgnoreCase("RandomMembersClustering")) {
+        } else if (algorithmName.toLowerCase().equalsIgnoreCase("RandomMembersClustering".toLowerCase())) {
             return new RandomMembersClustering();
-        } else if (algorithmName.equalsIgnoreCase("ExpectationMaximization")) {
+        } else if (algorithmName.toLowerCase().equalsIgnoreCase("ExpectationMaximization".toLowerCase())) {
             return new ExpectationMaximization();
-        } else if (algorithmName.equalsIgnoreCase("Cobweb")) {
+        } else if (algorithmName.toLowerCase().equalsIgnoreCase("Cobweb".toLowerCase())) {
             return  new CobwebAlgorithm();
-        } else if (algorithmName.equalsIgnoreCase("Hierachical")){
-            return new Hierachical();
+        } else if (algorithmName.toLowerCase().equalsIgnoreCase("Hierarchical".toLowerCase())){
+            return new Hierarchical();
         }
         else {
             return null;

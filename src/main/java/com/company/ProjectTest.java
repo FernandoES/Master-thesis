@@ -42,7 +42,7 @@ public class ProjectTest {
     public  void runTests(){
         KMeansTest();
         wekaTrainingTest();
-        hierachicalTest();
+        hierarchicalTest();
     }
 
     public void wekaTrainingTest(){
@@ -120,7 +120,7 @@ public class ProjectTest {
         return output;
     }
 
-    public void hierachicalTest(){
+    public void hierarchicalTest(){
         String text = "";
 
         text +="NumberOfGroups, Error, EmptyGroups, EmptyPercentage, NonEmptyGroups, trainingPercentaje"+"\n";
@@ -131,7 +131,7 @@ public class ProjectTest {
             ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
 
             int numberOfGroups = 0;
-            Algorithm algorithm = factory.getAlgorithm("Hierachical", numberOfGroups);
+            Algorithm algorithm = factory.getAlgorithm("Hierarchical", numberOfGroups);
             int repetition;
             double error = 0;
             EmptyGroups = 0;
@@ -146,7 +146,7 @@ public class ProjectTest {
                     (numberOfGroups - EmptyGroups) + "," + trainingPercentage/100+"\n";
             System.gc();
         }
-        printToFile(text, "Hierachical");
+        printToFile(text, "Hierarchical");
     }
 
     private static double runSingleAlgorithmsSingleMean(ClassValues[] classes, ClassValues[] classesToTrain, ClassValues[] classesToTest,

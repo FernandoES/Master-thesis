@@ -30,10 +30,10 @@ public class Main {
 
         /*The kind of use for the program is selected according to the user criteria previously determined*/
         switch(userInput.applyTest){
-            case "T":
+            case "t":
                 testAlgorithms(classes,userInput.algorithmsSelected, userInput.numberOfGroups, factory);
                 break;
-            case "A":
+            case "a":
                 applyAlgorithms(classes, userInput.algorithmsSelected, userInput.projectToAnalyse, userInput.numberOfGroups, factory);
                 break;
             default:

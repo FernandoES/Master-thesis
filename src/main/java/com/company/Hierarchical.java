@@ -6,18 +6,15 @@ import weka.core.Instances;
 
 
 /*
-The Hierachical algorithm from the weka library, which is not part of this project, is used to estimate the groups
+The Hierarchical algorithm from the weka library, which is not part of this project, is used to estimate the groups
  */
-public class Hierachical extends Algorithm {
+public class Hierarchical extends Algorithm {
 
 
 
     public ClassValues[] computeClassAdscription(ClassValues [] classes){
-        System.out.println("he");
         Instances wekaValues = Collector.convertClassToWeka(classes );
-        System.out.println("re");
         int[] classAdscription = getGroupBelogness(wekaValues);
-        System.out.println("donee");
         for (int i = 0; i <classAdscription.length ; i++) {
             classes[i].GroupAdscription = classAdscription[i];
         }
@@ -30,9 +27,9 @@ public class Hierachical extends Algorithm {
     private int[] getGroupBelogness(Instances wekaValues){
 
         try {
-            HierarchicalClusterer clusterer = new HierarchicalClusterer();   // new instance of clusterer
+            HierarchicalClusterer clusterer = new HierarchicalClusterer();  // new instance of clusterer
             ClusterEvaluation eval = new ClusterEvaluation();
-            clusterer.buildClusterer(wekaValues);                                 // build clusterer
+            clusterer.buildClusterer(wekaValues);                           // build clusterer
             eval.setClusterer(clusterer);                                   // the cluster to evaluate
             eval.evaluateClusterer(wekaValues);
             double[] clusterAssignments = eval.getClusterAssignments();

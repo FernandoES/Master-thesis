@@ -20,11 +20,11 @@ public class UserInput {
     //"/Users/fernandog/Documents/csvMetrics.txt";
 
     private final static String DEFAULT_CSV = "./related/cleanCSV.txt";
-    private final static String DEFAULT_APPLYTEST = "B";
+    private final static String DEFAULT_APPLYTEST = "t";
     private final static String[] DEFAULT_ALGORITHM = {"RandomMembersClustering", "RandomCentersClustering","KMeansInternal",
-            "KMeansExternal","ExpectationMaximization", "Hierachical"};
+            "KMeansExternal","ExpectationMaximization","KMeansWeka", "Hierarchical"};
     //{"RandomMembersClustering", "RandomCentersClustering","KMeansInternal",
-    //            "ExpectationMaximization","Cobweb", "Hierachical"};
+    //            "ExpectationMaximization","Cobweb", "Hierarchical"};
     private final static String DEFAULT_PROJECT = "./";
     private final static String DEFAULT_LIMITATIONS = "v";
     private final static int DEFAULT_NUMBER_GROUPS = 2;
@@ -62,6 +62,7 @@ public class UserInput {
          if(applyTest.length() == 0){
              applyTest = DEFAULT_APPLYTEST;
          }
+         applyTest = applyTest.toLowerCase();
 
         System.out.println("Please, introduce the number of groups you desire; or nothing for default = 2");
          int numberOfGroups = DEFAULT_NUMBER_GROUPS;
@@ -74,11 +75,16 @@ public class UserInput {
              }
          }
 
-         System.out.println("Please write \"a\" to load only one version of each class for training, or \"v\" or nothing to choose all of them");
+         System.out.println("Please write \"a\" to load every version of each class for training," +
+                 " or \"v\" or nothing to choose just one version of each class");
          String limitations = scanner.nextLine().toLowerCase();
+         if(limitations.length() == 0 ){
+             limitations = "v";
+         }
 
         List<String> algorithmList = new ArrayList<String>();
-         System.out.println("Please, introduce the name of the algorithms to be applied separated by enter, or press enter for default example");
+         System.out.println("Please, introduce the name of the algorithms to be applied separated by enter," +
+                 " or press enter for default example");
 
         algorithmList.add(scanner.nextLine());
          if( algorithmList.get(algorithmList.size() - 1 ).length() > 0){
