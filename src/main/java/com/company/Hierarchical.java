@@ -13,8 +13,11 @@ public class Hierachical extends Algorithm {
 
 
     public ClassValues[] computeClassAdscription(ClassValues [] classes){
+        System.out.println("he");
         Instances wekaValues = Collector.convertClassToWeka(classes );
+        System.out.println("re");
         int[] classAdscription = getGroupBelogness(wekaValues);
+        System.out.println("donee");
         for (int i = 0; i <classAdscription.length ; i++) {
             classes[i].GroupAdscription = classAdscription[i];
         }
