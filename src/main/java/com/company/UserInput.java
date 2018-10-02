@@ -17,9 +17,7 @@ public class UserInput {
     public String limitations;
     public int numberOfGroups;
 
-    //"/Users/fernandog/Documents/csvMetrics.txt";
-
-    private final static String DEFAULT_CSV = "./related/cleanCSV.txt";
+    private final static String DEFAULT_CSV = "./related/informationSource/cleanCSV.csv";
     private final static String DEFAULT_APPLYTEST = "t";
     private final static String[] DEFAULT_ALGORITHM = {"RandomMembersClustering", "RandomCentersClustering","KMeansInternal",
             "KMeansExternal","ExpectationMaximization","KMeansWeka", "Hierarchical"};
@@ -49,20 +47,27 @@ public class UserInput {
 
          Scanner scanner = new Scanner(System.in);
 
+
+        System.out.println("Please, introduce \'A\' for applying the algorithm to a real project cointained in the computer," +
+                "\'B\' for the battery of test runned for the final project in them this program was developed;\n" +
+                " or \'T\' or nothing for testing");
+        String applyTest = scanner.nextLine();
+        if(applyTest.length() == 0){
+            applyTest = DEFAULT_APPLYTEST;
+        }
+        applyTest = applyTest.toLowerCase();
+
+        if(applyTest.equalsIgnoreCase("b")){
+            System.out.println("Thanks, that is all the required information since  the set of testing does not require " +
+                    "selection by the user of algorithms, project limitation or number of groups");
+            return  new UserInput(DEFAULT_CSV, applyTest, DEFAULT_ALGORITHM, DEFAULT_PROJECT, DEFAULT_LIMITATIONS, DEFAULT_NUMBER_GROUPS);
+        }
+
          System.out.println("Please, introduce the path of the csv which contains the training information, press enter for standard");
          String csvPath = scanner.nextLine();
          if(csvPath.length() == 0 ){
              csvPath = DEFAULT_CSV;
          }
-
-         System.out.println("Please, introduce \'A\' for applying the algorithm to a real project cointained in the computer," +
-                 "\'B\' for the battery of test runned for the final project in them this program was developed;\n" +
-                 " or \'T\' or nothing for testing");
-         String applyTest = scanner.nextLine();
-         if(applyTest.length() == 0){
-             applyTest = DEFAULT_APPLYTEST;
-         }
-         applyTest = applyTest.toLowerCase();
 
         System.out.println("Please, introduce the number of groups you desire; or nothing for default = 2");
          int numberOfGroups = DEFAULT_NUMBER_GROUPS;
@@ -85,6 +90,7 @@ public class UserInput {
         List<String> algorithmList = new ArrayList<String>();
          System.out.println("Please, introduce the name of the algorithms to be applied separated by enter," +
                  " or press enter for default example");
+         enumerateAlgorithms();
 
         algorithmList.add(scanner.nextLine());
          if( algorithmList.get(algorithmList.size() - 1 ).length() > 0){
@@ -110,6 +116,14 @@ public class UserInput {
 
         return new UserInput( csvPath, applyTest, algorithmsSelected, projectToAnalyse, limitations,numberOfGroups);
      }
+
+     //The available algorithms are listed
+    private static void enumerateAlgorithms(){
+        System.out.println("The algorithms by default are: ");
+        for (int i = 0; i <DEFAULT_ALGORITHM.length ; i++) {
+            System.out.println(DEFAULT_ALGORITHM[i]);
+        }
+    }
 
 
 }

@@ -31,12 +31,12 @@ public class Cleaner {
             if (!matcher.find( )) {
                 throw new Exception();
             }
-            fileToTest = new File(matcher.group(1)+"cleanCSV"+".txt");
+            fileToTest = new File(matcher.group(1)+"cleanCSV"+".csv");
             if(!fileToTest.exists()){
                 return fileToTest.getAbsolutePath();
             }
             for(int i=0;i<10000;i++){
-                fileToTest = new File(matcher.group(1)+"cleanCSV-"+i+".txt");
+                fileToTest = new File(matcher.group(1)+"cleanCSV-"+i+".csv");
                 if(!fileToTest.exists()){
                     return fileToTest.getAbsolutePath();
                 }
