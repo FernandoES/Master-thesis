@@ -1,4 +1,6 @@
-package com.company;
+package com.company.algorithms;
+
+import com.company.*;
 
 
 public class RandomMembersClustering extends Algorithm {

@@ -1,4 +1,6 @@
-package com.company;
+package com.company.algorithms;
+
+import com.company.*;
 
 /*
 Random group selection algorithm that decide group centers randomly and assign every class to the group of its closest

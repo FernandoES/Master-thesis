@@ -1,14 +1,12 @@
-package com.company;
+package com.company.algorithms;
+
+import com.company.*;
 
 import weka.clusterers.ClusterEvaluation;
-import weka.clusterers.EM;
+import weka.clusterers.Cobweb;
 import weka.core.Instances;
 
-
-/*
-The expectation maximization algorithm from the weka library, which is not part of this project, is used to estimate the groups
- */
-public class ExpectationMaximization extends Algorithm {
+public class CobwebAlgorithm extends Algorithm {
 
 
 
@@ -27,7 +25,7 @@ public class ExpectationMaximization extends Algorithm {
     private int[] getGroupBelogness(Instances wekaValues){
 
         try {
-            EM clusterer = new EM();   // new instance of clusterer
+            Cobweb clusterer = new Cobweb();   // new instance of clusterer
             ClusterEvaluation eval = new ClusterEvaluation();
             clusterer.buildClusterer(wekaValues);                                 // build clusterer
             eval.setClusterer(clusterer);                                   // the cluster to evaluate

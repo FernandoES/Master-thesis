@@ -1,4 +1,6 @@
-package com.company;
+package com.company.algorithms;
+
+import com.company.*;
 
 /*
 The clustering algorithm KMeansInternal is implemented to determine groups takking the test values into acccount in order

@@ -2,6 +2,7 @@ package com.company;
 
 import java.lang.reflect.*;
 import java.util.*;
+import com.company.algorithms.*;
 
 public class AlgorithmFactory {
 
@@ -29,7 +30,7 @@ public class AlgorithmFactory {
 
     private static Algorithm getAlgorithmByName(String objectName){
         try {
-            String constructorWithPackage = "com.company." + objectName;
+            String constructorWithPackage = "com.company.algorithms." + objectName;
 
             Class algorithmName = Class.forName(constructorWithPackage);
             Constructor constructor = algorithmName.getConstructor();

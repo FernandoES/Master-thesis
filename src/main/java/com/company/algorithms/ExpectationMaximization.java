@@ -1,14 +1,16 @@
-package com.company;
+package com.company.algorithms;
+
+import com.company.*;
 
 import weka.clusterers.ClusterEvaluation;
-import weka.clusterers.SimpleKMeans;
+import weka.clusterers.EM;
 import weka.core.Instances;
 
 
 /*
-The KMeans algorithm from the weka library, which is not part of this project, is used to estimate the groups
+The expectation maximization algorithm from the weka library, which is not part of this project, is used to estimate the groups
  */
-public class KMeansWeka extends Algorithm {
+public class ExpectationMaximization extends Algorithm {
 
 
 
@@ -27,8 +29,7 @@ public class KMeansWeka extends Algorithm {
     private int[] getGroupBelogness(Instances wekaValues){
 
         try {
-            weka.clusterers.SimpleKMeans clusterer = new SimpleKMeans();   // new instance of clusterer
-            clusterer.setNumClusters(NUMBER_OF_GROUPS);
+            EM clusterer = new EM();   // new instance of clusterer
             ClusterEvaluation eval = new ClusterEvaluation();
             clusterer.buildClusterer(wekaValues);                                 // build clusterer
             eval.setClusterer(clusterer);                                   // the cluster to evaluate

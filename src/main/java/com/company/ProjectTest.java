@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Date;
 
 /*
 
@@ -40,9 +41,10 @@ public class ProjectTest {
 
     /* Set of test used for analyzing the program in the final proyect where the program was developed */
     public  void runTests(){
-        KMeansTest();
-        wekaTrainingTest();
-        hierarchicalTest();
+        computingTime();
+        //KMeansTest();
+        //wekaTrainingTest();
+        //hierarchicalTest();
     }
 
     public void wekaTrainingTest(){
@@ -63,6 +65,58 @@ public class ProjectTest {
                 printToFile(text, algs[i]+"-"+train[j] );
             }
         }
+    }
+
+    public void computingTime(){
+
+        String[] algsGroup = {"KMeansExternal","KMeansInternal","RandomCentersClustering","RandomMembersClustering",
+                "KMeansWeka"};
+        String[] algsNoGroup = {"ExpectationMaximization", "Hierarchical"};
+        double trainingPercentage = 0.75;
+
+        ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * trainingPercentage));
+        ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
+        /*for (String alg: algsNoGroup) {
+            String text = timeTest(alg, classesToTrain, classesToTest );
+            printToFile(text, alg+" time");
+        }*/
+        for (String alg: algsGroup) {
+            String text = timeTestGroup(alg, classesToTrain, classesToTest );
+            printToFile(text, alg+" time");
+        }
+    }
+
+
+    public String timeTest(String algorithmName, ClassValues[] classesToTrain, ClassValues[] classesToTest ){
+        Date date= new Date();
+        long time0= date.getTime();
+        int repetition;
+        Algorithm algorithm = factory.getAlgorithm(algorithmName, 1);
+        for ( repetition = 0; repetition < 10 ; repetition++) {
+            runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
+        }
+        Date date2 = new Date();
+        long time2 = date2.getTime();
+        return String.valueOf((time2-time0)/(long)(repetition*1000));
+    }
+
+    public String timeTestGroup(String algorithmName, ClassValues[] classesToTrain, ClassValues[] classesToTest ){
+        String output = "NumberOfGroups, ComputingTime";
+        Date date= new Date();
+        long time0= date.getTime();
+        int repetition;
+        for (int numberOfGroups = minGroups; numberOfGroups < maxGroups ; numberOfGroups++) {
+
+            Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
+
+            for (repetition = 0; repetition < 10; repetition++) {
+                runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
+            }
+            Date date2 = new Date();
+            long time2 = date2.getTime();
+            output += numberOfGroups+" , "+((time2-time0)/(repetition*1000)) + "\n";
+        }
+        return output;
     }
 
     public String emptyGroupsTest(String algorithmName, double trainingPercentage){

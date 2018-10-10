@@ -94,7 +94,7 @@ public class UserInput {
 
         algorithmList.add(scanner.nextLine());
          if( algorithmList.get(algorithmList.size() - 1 ).length() > 0){
-             System.out.println("Introduce next algorithmOld to compare or enter for no algorithmOld else");
+             System.out.println("Introduce next algorithm to compare or enter for no algorithm else");
              algorithmList.add(scanner.nextLine());
          }
         algorithmList.remove(algorithmList.size() - 1 );
@@ -104,11 +104,13 @@ public class UserInput {
                  algorithmList.add(algorithm);
              }
          }
-             String[] algorithmsSelected = algorithmList.toArray(new String[algorithmList.size()]);;
+         String[] algorithmsSelected = algorithmList.toArray(new String[algorithmList.size()]);;
 
-
-         System.out.println("Please, introduce the path of the project that sould be analysed or press enter for example");
-         String projectToAnalyse = scanner.nextLine();
+        String projectToAnalyse = "\n";
+         if(applyTest.equalsIgnoreCase("a")) {
+             System.out.println("Please, introduce the path of the project that sould be analysed or press enter for example");
+             projectToAnalyse = scanner.nextLine();
+         }
          if(projectToAnalyse.length() == 0){
              projectToAnalyse = DEFAULT_PROJECT;
          }

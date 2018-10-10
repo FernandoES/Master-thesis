@@ -1,4 +1,6 @@
-package com.company;
+package com.company.algorithms;
+
+import com.company.*;
 
 /*
 The clustering algorithm KMeans is implemented to determine groups, not takking the test values in account to compute the
@@ -12,7 +14,7 @@ public class KMeansExternal extends Algorithm {
     public ClassValues[] computeClassAdscription(ClassValues [] classes){
 
         ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * Main.TRAINING_PERCENTAGE));
-        ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
+        ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length);
 
         double[][] metricValuesToTrain = extractMetricsFromClass(classesToTrain);
         double[][] metricValuesToTest = extractMetricsFromClass(classesToTest);

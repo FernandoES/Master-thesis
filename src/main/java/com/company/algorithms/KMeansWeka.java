@@ -1,14 +1,16 @@
-package com.company;
+package com.company.algorithms;
+
+import com.company.*;
 
 import weka.clusterers.ClusterEvaluation;
-import weka.clusterers.HierarchicalClusterer;
+import weka.clusterers.SimpleKMeans;
 import weka.core.Instances;
 
 
 /*
-The Hierarchical algorithm from the weka library, which is not part of this project, is used to estimate the groups
+The KMeans algorithm from the weka library, which is not part of this project, is used to estimate the groups
  */
-public class Hierarchical extends Algorithm {
+public class KMeansWeka extends Algorithm {
 
 
 
@@ -27,9 +29,10 @@ public class Hierarchical extends Algorithm {
     private int[] getGroupBelogness(Instances wekaValues){
 
         try {
-            HierarchicalClusterer clusterer = new HierarchicalClusterer();  // new instance of clusterer
+            weka.clusterers.SimpleKMeans clusterer = new SimpleKMeans();   // new instance of clusterer
+            clusterer.setNumClusters(NUMBER_OF_GROUPS);
             ClusterEvaluation eval = new ClusterEvaluation();
-            clusterer.buildClusterer(wekaValues);                           // build clusterer
+            clusterer.buildClusterer(wekaValues);                                 // build clusterer
             eval.setClusterer(clusterer);                                   // the cluster to evaluate
             eval.evaluateClusterer(wekaValues);
             double[] clusterAssignments = eval.getClusterAssignments();
