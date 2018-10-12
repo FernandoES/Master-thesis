@@ -15,15 +15,12 @@ plugins {
 }
 apply plugin: 'java'
 
-
-task fatJar(type: Jar) {
+jar {
     manifest {
         attributes 'Main-Class': 'com.company.Main'
     }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
+
 // Define the main class for the application
 mainClassName = 'com.company.Main'
 
