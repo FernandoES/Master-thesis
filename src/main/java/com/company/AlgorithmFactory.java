@@ -16,7 +16,7 @@ public class AlgorithmFactory {
     }
 
     public static String[] availableAlgorithms = {"KMeansInternal","KMeansExternal","KMeansWeka","RandomCentersClustering",
-            "RandomMembersClustering","RandomMembersClustering","ExpectationMaximization","Cobweb","Hierarchical"};
+            "RandomMembersClustering","RandomMembersClustering","ExpectationMaximization","CobwebAlgorithm","Hierarchical"};
 
     private static Algorithm selectAlgorithm(String algorithmName) {
         Map<String, String> availableArrays = new HashMap<String, String>();

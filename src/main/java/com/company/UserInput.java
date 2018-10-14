@@ -19,10 +19,6 @@ public class UserInput {
 
     private final static String DEFAULT_CSV = "./related/informationSource/cleanCSV.csv";
     private final static String DEFAULT_APPLYTEST = "t";
-    private final static String[] DEFAULT_ALGORITHM = {"RandomMembersClustering", "RandomCentersClustering","KMeansInternal",
-            "KMeansExternal","ExpectationMaximization","KMeansWeka", "Hierarchical"};
-    //{"RandomMembersClustering", "RandomCentersClustering","KMeansInternal",
-    //            "ExpectationMaximization","Cobweb", "Hierarchical"};
     private final static String DEFAULT_PROJECT = "./";
     private final static String DEFAULT_LIMITATIONS = "v";
     private final static int DEFAULT_NUMBER_GROUPS = 2;
@@ -40,7 +36,7 @@ public class UserInput {
     /*constructor for default values*/
     public UserInput(){
 
-        this(DEFAULT_CSV, DEFAULT_APPLYTEST, DEFAULT_ALGORITHM, DEFAULT_PROJECT, DEFAULT_LIMITATIONS, DEFAULT_NUMBER_GROUPS);
+        this(DEFAULT_CSV, DEFAULT_APPLYTEST, AlgorithmFactory.availableAlgorithms, DEFAULT_PROJECT, DEFAULT_LIMITATIONS, DEFAULT_NUMBER_GROUPS);
     }
 
     public static UserInput askForInformation(){
@@ -60,7 +56,7 @@ public class UserInput {
         if(applyTest.equalsIgnoreCase("b")){
             System.out.println("Thanks, that is all the required information since  the set of testing does not require " +
                     "selection by the user of algorithms, project limitation or number of groups");
-            return  new UserInput(DEFAULT_CSV, applyTest, DEFAULT_ALGORITHM, DEFAULT_PROJECT, DEFAULT_LIMITATIONS, DEFAULT_NUMBER_GROUPS);
+            return  new UserInput(DEFAULT_CSV, applyTest, AlgorithmFactory.availableAlgorithms, DEFAULT_PROJECT, DEFAULT_LIMITATIONS, DEFAULT_NUMBER_GROUPS);
         }
 
          System.out.println("Please, introduce the path of the csv which contains the training information, press enter for standard");
@@ -100,7 +96,7 @@ public class UserInput {
         algorithmList.remove(algorithmList.size() - 1 );
 
          if(algorithmList.size() == 0){
-             for(String algorithm:  DEFAULT_ALGORITHM){
+             for(String algorithm:  AlgorithmFactory.availableAlgorithms){
                  algorithmList.add(algorithm);
              }
          }
@@ -122,8 +118,8 @@ public class UserInput {
      //The available algorithms are listed
     private static void enumerateAlgorithms(){
         System.out.println("The algorithms by default are: ");
-        for (int i = 0; i <DEFAULT_ALGORITHM.length ; i++) {
-            System.out.println(DEFAULT_ALGORITHM[i]);
+        for (int i = 0; i <AlgorithmFactory.availableAlgorithms.length ; i++) {
+            System.out.println(AlgorithmFactory.availableAlgorithms[i]);
         }
     }
 

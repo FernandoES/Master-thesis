@@ -36,15 +36,17 @@ public class ProjectTest {
     - Duplicate with/out versions ?
     - Run algorithms one by one
     - Optimize computing
+    - Every single metric
 
      */
 
     /* Set of test used for analyzing the program in the final proyect where the program was developed */
     public  void runTests(){
-        computingTime();
-        //KMeansTest();
-        //wekaTrainingTest();
-        //hierarchicalTest();
+        //singleMetricTest();
+        /*computingTime();
+        KMeansTest();
+        wekaTrainingTest();
+        hierarchicalTest();*/
     }
 
     public void wekaTrainingTest(){
@@ -67,6 +69,34 @@ public class ProjectTest {
         }
     }
 
+    public void singleMetricTest(){
+        ClassValues[] classesToModify = new ClassValues[classes.length];
+        for (int i = 0; i <classes.length ; i++) {
+            classesToModify[i] = ClassValues.copyValues(classes[i]);
+        }
+
+        for (int i = 0; i <classes[0].metricValues.length ; i++) {
+            String metric = classes[0].variableNames[i];
+            double[][] selectedMetric = new double[classes.length][1];
+            for (int j = 0; j <selectedMetric.length ; j++) {
+                selectedMetric[j][0] = classes[j].metricValues[i];
+                classesToModify[j].metricValues = selectedMetric[j];
+            }
+            groupMetricTest(classesToModify, metric);
+        }
+    }
+
+    public void groupMetricTest(ClassValues[] classesToModify, String name){
+        String[] algs = {"KMeansExternal","KMeansInternal"};
+        double[] train = {0.25,0.5,0.75,0.8,0.85,0.9,0.95};
+        for (int i = 0; i <algs.length ; i++) {
+            for (int j = 0; j <train.length ; j++) {
+                String text = metricGroupTest(algs[i],train[j],classesToModify);
+                printToFile(text, algs[i]+"-"+train[j]+"-"+name );
+            }
+        }
+    }
+
     public void computingTime(){
 
         String[] algsGroup = {"KMeansExternal","KMeansInternal","RandomCentersClustering","RandomMembersClustering",
@@ -76,10 +106,10 @@ public class ProjectTest {
 
         ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * trainingPercentage));
         ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
-        /*for (String alg: algsNoGroup) {
+        for (String alg: algsNoGroup) {
             String text = timeTest(alg, classesToTrain, classesToTest );
             printToFile(text, alg+" time");
-        }*/
+        }
         for (String alg: algsGroup) {
             String text = timeTestGroup(alg, classesToTrain, classesToTest );
             printToFile(text, alg+" time");
@@ -89,23 +119,23 @@ public class ProjectTest {
 
     public String timeTest(String algorithmName, ClassValues[] classesToTrain, ClassValues[] classesToTest ){
         Date date= new Date();
-        long time0= date.getTime();
-        int repetition;
+        double time0= date.getTime();
+        double repetition;
         Algorithm algorithm = factory.getAlgorithm(algorithmName, 1);
         for ( repetition = 0; repetition < 10 ; repetition++) {
             runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
         }
         Date date2 = new Date();
-        long time2 = date2.getTime();
-        return String.valueOf((time2-time0)/(long)(repetition*1000));
+        double time2 = date2.getTime();
+        return String.valueOf((time2-time0)/(repetition*1000));
     }
 
     public String timeTestGroup(String algorithmName, ClassValues[] classesToTrain, ClassValues[] classesToTest ){
-        String output = "NumberOfGroups, ComputingTime";
-        Date date= new Date();
-        long time0= date.getTime();
-        int repetition;
+        String output = "NumberOfGroups, ComputingTime\n";
+        double repetition;
         for (int numberOfGroups = minGroups; numberOfGroups < maxGroups ; numberOfGroups++) {
+            Date date= new Date();
+            double time0= date.getTime();
 
             Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
 
@@ -113,9 +143,34 @@ public class ProjectTest {
                 runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
             }
             Date date2 = new Date();
-            long time2 = date2.getTime();
+            double time2 = date2.getTime();
             output += numberOfGroups+" , "+((time2-time0)/(repetition*1000)) + "\n";
         }
+        return output;
+    }
+
+    public String metricGroupTest(String algorithmName, double trainingPercentage, ClassValues[] classesToModify){
+        String output = "NumberOfGroups, Error, EmptyGroups, EmptyPercentage, NonEmptyGroups"+"\n";
+
+        ClassValues[] classesToTrain = Arrays.copyOfRange(classesToModify, 0, (int) Math.floor(classesToModify.length * trainingPercentage));
+        ClassValues[] classesToTest = Arrays.copyOfRange(classesToModify, classesToTrain.length, classesToModify.length - 1);
+
+        for (int numberOfGroups = minGroups; numberOfGroups < maxGroups; numberOfGroups++) {
+
+            Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
+            int repetition;
+            double error = 0;
+            EmptyGroups = 0;
+            for (repetition = 0; repetition <10 ; repetition++) {
+                error += runSingleAlgorithmsSingleMean(classesToModify, classesToTrain, classesToTest, algorithm);
+            }
+            error /= repetition;
+            EmptyGroups /= repetition;
+            double emptyPercentage = (double)EmptyGroups/(double)numberOfGroups;
+            output += numberOfGroups+","+error+","+EmptyGroups+","+emptyPercentage+","+(numberOfGroups-EmptyGroups)+"\n";
+            System.gc();
+        }
+
         return output;
     }
 

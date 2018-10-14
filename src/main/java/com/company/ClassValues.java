@@ -115,4 +115,19 @@ public class ClassValues {
         classToReset.GroupAdscription = -1;
         classToReset.numberOfBugs = -1;
     }
+
+    public static ClassValues copyValues(ClassValues original){
+        String[] variableN = new String[original.variableNames.length];
+        for (int i = 0; i <variableN.length ; i++) {
+            variableN[i] = original.variableNames[i];
+        }
+        double[] metric = new double[original.metricValues.length];
+        for (int i = 0; i <metric.length ; i++) {
+            metric[i] = original.metricValues[i];
+        }
+        ClassValues newClass = new ClassValues(original.project, original.version,
+                original.className, variableN, metric, original.numberOfBugs,
+                original.GroupAdscription);
+        return  newClass;
+    }
 }
