@@ -86,8 +86,7 @@ Once the new algorithm is created the results will be tested by the test
 method, but the implementer should not worry about it, since it is
 already implemented by \(Algorithm\) class itself.  
 Many useful methods from algorithm class can be used to ease the
-implementation of the new algorithm, their name and use can be checked
-in the API (CHECK BY FINAL VERSION IF API SHOWN).  
+implementation of the new algorithm.  
 After introducing the algorithm, the user has to add the name of the
 created class to the variable \(availableAlgorithms\) of the class
 \(AlgorithmFactory\), this will allow the system to know that a new
@@ -138,6 +137,8 @@ integer bigger than one, the introduction of an algorithm name that is
 not included in the list will make the program to end and, for "apply"
 use the introduction of a wrong path from a local project would have a
 similar consequence.
+
+## Required technologies
 
 1.  https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
