@@ -25,7 +25,7 @@ public class Main {
 
         /* The classes with name and metrics to train and test are loaded */
         ClassValues[] classes = Collector.loadClassValues(userInput.csvPath, userInput.limitations);
-        ClassValues[] ultimativeClasses = Collector.deleteBadMetrics(classes);
+        //ClassValues[] ultimativeClasses = Collector.deleteBadMetrics(classes);
 
         /* Factory pattern is used to select the set of algorithm which will be used */
         AlgorithmFactory factory = new AlgorithmFactory();
@@ -39,7 +39,7 @@ public class Main {
                 applyAlgorithms(classes, userInput.algorithmsSelected, userInput.projectToAnalyse, userInput.numberOfGroups, factory);
                 break;
             default:
-                ProjectTest test = new ProjectTest(ultimativeClasses);
+                ProjectTest test = new ProjectTest(classes);
                 test.runTests();
         }
 
