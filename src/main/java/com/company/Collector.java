@@ -45,6 +45,32 @@ public class Collector {
         return classes;
     }
 
+    public static ClassValues[] deleteBadMetrics(ClassValues[] inputClasses){
+        ClassValues[] outputClasses = new ClassValues[inputClasses.length];
+        for (int i = 0; i <inputClasses.length ; i++) {
+
+            double[] metricValues = new double[inputClasses[i].metricValues.length-4];
+            String[] variableNames = new String[inputClasses[i].variableNames.length-4];
+
+            outputClasses[i] = new ClassValues(inputClasses[i].project,inputClasses[i].version,
+                    inputClasses[i].className,variableNames,metricValues,
+                    inputClasses[i].numberOfBugs,inputClasses[i].GroupAdscription);
+
+            int varCounter = 0;
+            for (int j = 0; j <inputClasses[i].metricValues.length ; j++) {
+                if(!inputClasses[i].variableNames[j].equalsIgnoreCase("wmc")&&
+                   !inputClasses[i].variableNames[j].equalsIgnoreCase("lcom")&&
+                   !inputClasses[i].variableNames[j].equalsIgnoreCase("rfc")&&
+                   !inputClasses[i].variableNames[j].equalsIgnoreCase("loc")){
+
+                    outputClasses[i].metricValues[varCounter] = inputClasses[i].metricValues[j];
+                    outputClasses[i].variableNames[varCounter++] = inputClasses[i].variableNames[j];
+                }
+            }
+        }
+        return  outputClasses;
+    }
+
     private static String[][] loadAndSchuffle(String path, String limitations){
 
         String[][] CSVText = loadCSV(path);

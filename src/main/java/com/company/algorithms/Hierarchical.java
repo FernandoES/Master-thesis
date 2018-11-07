@@ -30,6 +30,7 @@ public class Hierarchical extends Algorithm {
 
         try {
             HierarchicalClusterer clusterer = new HierarchicalClusterer();  // new instance of clusterer
+            clusterer.setNumClusters(NUMBER_OF_GROUPS);
             ClusterEvaluation eval = new ClusterEvaluation();
             clusterer.buildClusterer(wekaValues);                           // build clusterer
             eval.setClusterer(clusterer);                                   // the cluster to evaluate

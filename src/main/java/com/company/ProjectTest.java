@@ -42,11 +42,39 @@ public class ProjectTest {
 
     /* Set of test used for analyzing the program in the final proyect where the program was developed */
     public  void runTests(){
-        //singleMetricTest();
-        /*computingTime();
+        computingTimeExternal();
+        computingTime();
+        singleMetricTest();
         KMeansTest();
         wekaTrainingTest();
-        hierarchicalTest();*/
+        hierarchicalTest();
+        hierarchicalTestGroup();
+        ultimativeTest();
+    }
+
+    public void ultimativeTest(){
+        ultimative("KMeansWeka",0.8,25,125);
+        ultimative("KMeansInternal",0.75,25,100);
+        ultimative("KMeansExternal",0.75,25,125);
+        ultimative("Hierarchical",0.95,39,56);
+        printToFile(basicPercentage("ExpectationMaximization",89,100),
+                "ExpectationMaximization-ultimative-trainingPercentage-min"+90+"-max-"+99);
+    }
+
+    public void ultimative(String algorithmName, double trainingPercentage, int min, int max){
+
+        String text = basicGroup(algorithmName,trainingPercentage,min,max);
+        printToFile(text,algorithmName+"-ultimative-trainingPercentage-"+
+                trainingPercentage+"-minGroups-"+min+"-maxGroups-"+max);
+    }
+
+
+    public void hierarchicalTestGroup(){
+        double[] train = {0.25,0.5,0.75,0.8,0.85,0.9,0.95};
+            for (int j = 0; j <train.length ; j++) {
+                String text = emptyGroupsTest("Hierarchical",train[j]);
+                printToFile(text, "Hierarchical-"+train[j] );
+            }
     }
 
     public void wekaTrainingTest(){
@@ -69,6 +97,32 @@ public class ProjectTest {
         }
     }
 
+    public String basicGroup(String algorithmName, double trainingPercentage, int min, int max ){
+        String output = "NumberOfGroups, Error, EmptyGroups, EmptyPercentage, NonEmptyGroups"+"\n";
+
+        ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * trainingPercentage));
+        ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
+
+        for (int numberOfGroups = min; numberOfGroups < max; numberOfGroups++) {
+
+            Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
+            int repetition;
+            double error = 0;
+            EmptyGroups = 0;
+            for (repetition = 0; repetition <1 ; repetition++) {
+                error += runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
+            }
+            error /= repetition;
+            EmptyGroups /= repetition;
+            double emptyPercentage = (double)EmptyGroups/(double)numberOfGroups;
+            output += numberOfGroups+","+error+","+EmptyGroups+","+emptyPercentage+","+(numberOfGroups-EmptyGroups)+"\n";
+            System.gc();
+        }
+        System.out.println(trainingPercentage);
+
+        return output;
+    }
+
     public void singleMetricTest(){
         ClassValues[] classesToModify = new ClassValues[classes.length];
         for (int i = 0; i <classes.length ; i++) {
@@ -82,13 +136,17 @@ public class ProjectTest {
                 selectedMetric[j][0] = classes[j].metricValues[i];
                 classesToModify[j].metricValues = selectedMetric[j];
             }
+            //String text = emptyMetricTest("ExpectationMaximization",classesToModify);
+            //printToFile(text, "ExpectationMaximization-"+metric );
             groupMetricTest(classesToModify, metric);
+
         }
     }
 
+
     public void groupMetricTest(ClassValues[] classesToModify, String name){
-        String[] algs = {"KMeansExternal","KMeansInternal"};
-        double[] train = {0.25,0.5,0.75,0.8,0.85,0.9,0.95};
+        String[] algs = { "KMeansWeka"};
+        double[] train = {0.25,0.5,0.75};
         for (int i = 0; i <algs.length ; i++) {
             for (int j = 0; j <train.length ; j++) {
                 String text = metricGroupTest(algs[i],train[j],classesToModify);
@@ -96,20 +154,31 @@ public class ProjectTest {
             }
         }
     }
+    public void computingTimeExternal(){
+        double[] trainingPercentage = {0.25,0.5,0.75,0.8,0.85,0.9,0.95};
+
+        for (double train: trainingPercentage ) {
+
+            ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * train));
+            ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
+            String text = timeTestGroup("KMeansExternal", classesToTrain, classesToTest );
+            printToFile(text, "KMeansExternal-time-"+train);
+        }
+    }
 
     public void computingTime(){
 
-        String[] algsGroup = {"KMeansExternal","KMeansInternal","RandomCentersClustering","RandomMembersClustering",
-                "KMeansWeka"};
-        String[] algsNoGroup = {"ExpectationMaximization", "Hierarchical"};
+        String[] algsGroup = {"Hierarchical"};
+                //("KMeansExternal","KMeansInternal","RandomCentersClustering","RandomMembersClustering", "KMeansWeka"};
+        //String[] algsNoGroup = {"ExpectationMaximization", "Hierarchical"};
         double trainingPercentage = 0.75;
 
         ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * trainingPercentage));
         ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
-        for (String alg: algsNoGroup) {
+        /*for (String alg: algsNoGroup) {
             String text = timeTest(alg, classesToTrain, classesToTest );
             printToFile(text, alg+" time");
-        }
+        }*/
         for (String alg: algsGroup) {
             String text = timeTestGroup(alg, classesToTrain, classesToTest );
             printToFile(text, alg+" time");
@@ -133,13 +202,13 @@ public class ProjectTest {
     public String timeTestGroup(String algorithmName, ClassValues[] classesToTrain, ClassValues[] classesToTest ){
         String output = "NumberOfGroups, ComputingTime\n";
         double repetition;
-        for (int numberOfGroups = minGroups; numberOfGroups < maxGroups ; numberOfGroups++) {
+        for (int numberOfGroups = minGroups; numberOfGroups < maxGroups ; numberOfGroups+=2) {
             Date date= new Date();
             double time0= date.getTime();
 
             Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
 
-            for (repetition = 0; repetition < 10; repetition++) {
+            for (repetition = 0; repetition < 1; repetition++) {
                 runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
             }
             Date date2 = new Date();
@@ -148,6 +217,7 @@ public class ProjectTest {
         }
         return output;
     }
+
 
     public String metricGroupTest(String algorithmName, double trainingPercentage, ClassValues[] classesToModify){
         String output = "NumberOfGroups, Error, EmptyGroups, EmptyPercentage, NonEmptyGroups"+"\n";
@@ -159,9 +229,10 @@ public class ProjectTest {
 
             Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
             int repetition;
+            String groupBelongness = "............";
             double error = 0;
             EmptyGroups = 0;
-            for (repetition = 0; repetition <10 ; repetition++) {
+            for (repetition = 0; repetition <1 ; repetition++) {
                 error += runSingleAlgorithmsSingleMean(classesToModify, classesToTrain, classesToTest, algorithm);
             }
             error /= repetition;
@@ -174,59 +245,72 @@ public class ProjectTest {
         return output;
     }
 
+
     public String emptyGroupsTest(String algorithmName, double trainingPercentage){
-        String output = "NumberOfGroups, Error, EmptyGroups, EmptyPercentage, NonEmptyGroups"+"\n";
-
-        ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * trainingPercentage));
-        ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
-
-        for (int numberOfGroups = minGroups; numberOfGroups < maxGroups; numberOfGroups++) {
-
-            Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
-            int repetition;
-            double error = 0;
-            EmptyGroups = 0;
-            for (repetition = 0; repetition <10 ; repetition++) {
-                error += runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
-            }
-            error /= repetition;
-            EmptyGroups /= repetition;
-            double emptyPercentage = (double)EmptyGroups/(double)numberOfGroups;
-            output += numberOfGroups+","+error+","+EmptyGroups+","+emptyPercentage+","+(numberOfGroups-EmptyGroups)+"\n";
-            System.gc();
-        }
-        System.out.println(trainingPercentage);
-
-        return output;
+        return basicGroup(algorithmName,trainingPercentage,minGroups,maxGroups);
     }
 
-    public String emptyTest(String algorithmName ){
+
+    public String emptyMetricTest(String algorithmName, ClassValues[] classesToModify ){
         String output = "";
 
         output +="NumberOfGroups, Error, EmptyGroups, EmptyPercentage, NonEmptyGroups, trainingPercentaje"+"\n";
 
-        for (double trainingPercentage = 1; trainingPercentage <100 ; trainingPercentage++) {
+        for (double trainingPercentage = 5; trainingPercentage <100 ; trainingPercentage+=5) {
+            System.out.println(trainingPercentage);
+            ClassValues[] classesToTrain = Arrays.copyOfRange(classesToModify, 0, (int) Math.floor(classesToModify.length * trainingPercentage/100));
+            ClassValues[] classesToTest = Arrays.copyOfRange(classesToModify, classesToTrain.length, classesToModify.length - 1);
 
-        ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * trainingPercentage/100));
-        ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
-
-        int numberOfGroups = 0;
-        Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
-        int repetition;
-        double error = 0;
-        EmptyGroups = 0;
-        for (repetition = 0; repetition < 10; repetition++) {
-            error += runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
-        }
-        error /= repetition;
-        EmptyGroups /= repetition;
-        numberOfGroups = Algorithm.getNumberOfGroups(classes);
-        double emptyPercentage = (double) EmptyGroups / (double) numberOfGroups;
-        output += numberOfGroups + "," + error + "," + EmptyGroups + "," + emptyPercentage + "," +
-                (numberOfGroups - EmptyGroups) + "," + trainingPercentage/100+"\n";
-        System.gc();
+            int numberOfGroups = 0;
+            Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
+            int repetition;
+            double error = 0;
+            EmptyGroups = 0;
+            for (repetition = 0; repetition < 1; repetition++) {
+                error += runSingleAlgorithmsSingleMean(classesToModify, classesToTrain, classesToTest, algorithm);
+            }
+            error /= repetition;
+            EmptyGroups /= repetition;
+            numberOfGroups = Algorithm.getNumberOfGroups(classes);
+            double emptyPercentage = (double) EmptyGroups / (double) numberOfGroups;
+            output += numberOfGroups + "," + error + "," + EmptyGroups + "," + emptyPercentage + "," +
+                    (numberOfGroups - EmptyGroups) + "," + trainingPercentage/100+"\n";
+            System.gc();
         }
         return output;
+    }
+
+    public String basicPercentage(String algorithmName, int min, int max ){
+        String output = "";
+
+        output +="NumberOfGroups, Error, EmptyGroups, EmptyPercentage, NonEmptyGroups, trainingPercentaje"+"\n";
+
+        for (double trainingPercentage = min; trainingPercentage <max ; trainingPercentage++) {
+
+            ClassValues[] classesToTrain = Arrays.copyOfRange(classes, 0, (int) Math.floor(classes.length * trainingPercentage/100));
+            ClassValues[] classesToTest = Arrays.copyOfRange(classes, classesToTrain.length, classes.length - 1);
+
+            int numberOfGroups = 0;
+            Algorithm algorithm = factory.getAlgorithm(algorithmName, numberOfGroups);
+            int repetition;
+            double error = 0;
+            EmptyGroups = 0;
+            for (repetition = 0; repetition < 10; repetition++) {
+                error += runSingleAlgorithmsSingleMean(classes, classesToTrain, classesToTest, algorithm);
+            }
+            error /= repetition;
+            EmptyGroups /= repetition;
+            numberOfGroups = Algorithm.getNumberOfGroups(classes);
+            double emptyPercentage = (double) EmptyGroups / (double) numberOfGroups;
+            output += numberOfGroups + "," + error + "," + EmptyGroups + "," + emptyPercentage + "," +
+                    (numberOfGroups - EmptyGroups) + "," + trainingPercentage/100+"\n";
+            System.gc();
+        }
+        return output;
+    }
+
+    public String emptyTest(String algorithmName ){
+        return basicPercentage(algorithmName,1,100);
     }
 
     public void hierarchicalTest(){
