@@ -1,5 +1,11 @@
 # Guide of use
 
+This program was developed for my final thesis of the Informatik Master in the Hochschule Darmstadt in collaboration with MaibornWolff 
+
+https://www.h-da.de  
+https://github.com/MaibornWolff/
+
+
 ## Introduction
 
 In this guide the final user of the program will be guided
