@@ -93,7 +93,6 @@ public class Metric {
             if( text == null){
                 text = fullfillEmptyValues(path);
             }
-            System.out.println(text);
             String[] metricsText = Arrays.copyOfRange(text.split(" "), 1, numberOfMetrics);
             in.close();
             double[] metrics = new double[metricsText.length + 1];
