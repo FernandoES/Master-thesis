@@ -16,8 +16,6 @@ useful for the analysis mode of the program
  */
 public class Metric {
 
-    //"/Users/fernandog/IdeaProjects/SZZUnleashed/";
-
     private static final int numberOfMetrics = 19;
     private static final String jarPath = "./ckjm_ext.jar";
 
