@@ -36,6 +36,14 @@ Either before of after cloning the project it has to be checked if the
 prerequisites are met. For this project both \(Java Development Kit\)
 \[1\] and \(Gradle\) \[2\] are required.
 
+In order to allow the analysis of projects locally ckjm_extended should
+downloaded and installed in the same folder of this project, the website
+of the program is the following one:
+
+http://gromit.iiar.pwr.wroc.pl/p_inf/ckjm/down.html
+
+
+
 ### Run and build
 
 Once the program is rewritten as desired it can be directly run by
@@ -151,3 +159,5 @@ similar consequence.
 2.  https://docs.gradle.org/current/userguide/installation.html
 
 3.  http://snow.iiar.pwr.wroc.pl:8080/MetricsRepo/
+
+4. http://gromit.iiar.pwr.wroc.pl/p_inf/ckjm/down.html

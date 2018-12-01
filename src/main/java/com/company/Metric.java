@@ -19,7 +19,7 @@ public class Metric {
     //"/Users/fernandog/IdeaProjects/SZZUnleashed/";
 
     private static final int numberOfMetrics = 19;
-    private static final String jarPath = "/Users/fernandog/Downloads/ckjm_ext.jar";
+    private static final String jarPath = "./ckjm_ext.jar";
 
     public List<String> classesList;
     public double[][] metrics;
@@ -95,6 +95,7 @@ public class Metric {
             if( text == null){
                 text = fullfillEmptyValues(path);
             }
+            System.out.println(text);
             String[] metricsText = Arrays.copyOfRange(text.split(" "), 1, numberOfMetrics);
             in.close();
             double[] metrics = new double[metricsText.length + 1];
